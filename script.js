@@ -14,7 +14,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const STRAVA_CLIENT_ID = "190062";
   const REDIRECT_URI = "http://localhost:5500";
 
-  const STRAVA_ACCESS_TOKEN = "Paste access token here";
+  const STRAVA_ACCESS_TOKEN = "a85b789a72ff2542b857425b1e036ddb12dde353";
 
   /* ============================
      STRAVA OAUTH BUTTON
@@ -32,11 +32,14 @@ document.addEventListener("DOMContentLoaded", () => {
     window.location.href = authUrl;
   });
 
+
   /* ============================
      FETCH ACTIVITIES
   ============================ */
   async function fetchActivities() {
     try {
+        console.log("Using token: ", STRAVA_ACCESS_TOKEN)
+
         let page = 1;
         let allActivities = [];
 
@@ -144,9 +147,25 @@ document.addEventListener("DOMContentLoaded", () => {
         `\nLongest Run: ${longestMiles} mi` +
         `\nFastest Pace: ${paceMin}:${paceSec} /mi`;
   }
+
+  function computeMonthlyMileage(activities) {
+    const runs = activities.filter(a => a.type === "Run");
+    const monthlyMiles = Array(12).fill(0);
+
+    runs.forEach(run => {
+        const month = new Date(run.start_date_local).getMonth();
+        monthlyMiles[month] += metersToMiles(run.distance);
+    });
+
+    return monthlyMiles
+  }
     
     fetchActivities().then(activities => {
+        if (!activities) return;
         computeCoreStats(activities);
         computeHighlights(activities);
+
+        const monthlyMiles = computeMonthlyMileage(activities);
+        console.log("MONTHLY MILES:", monthlyMiles)
     });
 });
