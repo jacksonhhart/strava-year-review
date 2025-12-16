@@ -14,7 +14,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const STRAVA_CLIENT_ID = "190062";
   const REDIRECT_URI = "http://localhost:5500";
 
-  const STRAVA_ACCESS_TOKEN = "a85b789a72ff2542b857425b1e036ddb12dde353";
+  const STRAVA_ACCESS_TOKEN = "Put access token here";
 
   /* ============================
      STRAVA OAUTH BUTTON
